@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script configures the /etc/hosts file to resolve localhost
+
+
+cp -f /etc/hosts /etc/hosts.backup
+
+
+grep -vE "localhost|facebook.com" /etc/hosts > /tmp/new_hosts
+
+
+echo "127.0.0.2 localhost" >> /tmp/new_hosts
+echo "8.8.8.8 facebook.com" >> /tmp/new_hosts
+
+
+cp -f /tmp/new_hosts /etc/hosts
+
+echo "Hosts file updated successfully."
