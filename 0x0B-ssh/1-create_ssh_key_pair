@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Generates a 4096-bit RSA key pair with a specified passphrase
+
+# Generating the key pair with the passphrase
+ssh-keygen -t rsa -b 4096 -C "school" -N "betty" -f school
