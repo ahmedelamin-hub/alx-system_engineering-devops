@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Configures SSH client to use a private key and disable password authentication
+
+# Ensure the .ssh directory exists
+mkdir -p ~/.ssh
+
+# Set the SSH client configuration
+echo "Host *
+  IdentityFile ~/.ssh/school
+  PasswordAuthentication no" > ~/.ssh/config
+
+# Set the appropriate permissions
+chmod 600 ~/.ssh/config
+
+# Notify user
+echo "SSH client configured. Password authentication disabled, using key ~/.ssh/school."
