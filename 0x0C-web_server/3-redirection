@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Script to install and configure nginx on Ubuntu to redirect /redirect_me to another URL
+
+# Update package list and install nginx
+apt-get update
+apt-get install -y nginx
+
+# Setup a simple HTML file
+echo "Hello World!" > /var/www/html/index.html
+
+# Configure Nginx for a 301 redirect
+# Using sed to insert a redirection configuration into the default site
+sed -i '/server_name _;/a \\trewrite ^/redirect_me$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-available/default
+
+# Restart Nginx to apply the changes using nginx command instead of systemctl or service
+nginx -s reload
+
+# Additional robustness for script running as root or with appropriate sudo permissions
