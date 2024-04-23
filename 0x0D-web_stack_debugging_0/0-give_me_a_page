@@ -1,0 +1,11 @@
+#!/bin/bash
+# This script debugs a Docker container to serve "Hello Holberton" from Apache
+
+# Start by ensuring Apache is installed
+apt-get update && apt-get install apache2 -y
+
+# Create the HTML file
+echo "Hello Holberton" > /var/www/html/index.html
+
+# Restart Apache using apache2ctl
+apache2ctl restart
