@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# This script configures Nginx to add a custom HTTP header with the server's hostname
+
+# Install Nginx if it's not already installed
+if ! which nginx > /dev/null 2>&1; then
+    echo "Nginx is not installed. Installing Nginx."
+    sudo apt-get update
+    sudo apt-get install -y nginx
+fi
+
+# Ensure the Nginx service is running
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Configure Nginx to add the custom header
+HEADER_FILE="/etc/nginx/conf.d/custom_headers.conf"
+echo "Adding custom header configuration in $HEADER_FILE"
+
+# Create or overwrite existing file with new header
+echo "add_header X-Served-By \$hostname;" | sudo tee $HEADER_FILE
+
+# Include the custom headers configuration in nginx.conf if not already included
+NGINX_CONF="/etc/nginx/nginx.conf"
+if ! grep -q "include /etc/nginx/conf.d/*.conf;" "$NGINX_CONF"; then
+    # Insert include directive just before the last line (assumed to be '}')
+    sudo sed -i '/http {/a \    include /etc/nginx/conf.d/*.conf;' $NGINX_CONF
+fi
+
+# Restart Nginx to apply changes
+echo "Restarting Nginx to apply changes."
+sudo systemctl restart nginx
+
+echo "Nginx has been configured with custom HTTP headers."
