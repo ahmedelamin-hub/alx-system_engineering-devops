@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# This script configures Nginx to run and listen on port 80 on all active IPv4 addresses
+
+# remove Nginx config
+rm /etc/nginx/sites-enabled/default
+#config to listen on the required port
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+#restart the server
+service nginx restart
