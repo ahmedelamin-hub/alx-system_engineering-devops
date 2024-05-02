@@ -4,6 +4,6 @@
 # config to listen on the required port
 ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 # restart the server
-service nginx start
+service nginx restart
 # kills the nginx process that was prev going
 kill "$(pgrep "nginx" | head -1)"
