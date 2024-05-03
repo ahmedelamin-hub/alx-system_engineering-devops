@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Script to fetch and display DNS record information for specified subdomains.
+
+get_dns_record() {
+    local subdomain=$1
+    local domain=$2
+
+    # Use dig to fetch the DNS record for the subdomain and parse it using awk
+    dig +noall +answer "${subdomain}.${domain}" | awk -v subdomain="$subdomain" '
+        { print "The subdomain " subdomain " is a " $4 " record and points to " $5 }
+    '
+}
+
+domain=$1
+subdomain=$2
+
+# Validate input and process requests for DNS information
+if [ -n "$domain" ] && [ -n "$subdomain" ]; then
+    get_dns_record "$subdomain" "$domain"
+else
+    # Display information for default subdomains if only the domain is provided
+    get_dns_record "www" "$domain"
+    get_dns_record "lb-01" "$domain"
+    get_dns_record "web-01" "$domain"
+    get_dns_record "web-02" "$domain"
+fi
