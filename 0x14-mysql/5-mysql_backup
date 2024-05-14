@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Check if a password is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <MySQL Root Password>"
+    exit 1
+fi
+
+# Assign password from argument
+MYSQL_PASSWORD="$1"
+
+# Generate filename based on the current date
+FILENAME=$(date +%d-%m-%Y).tar.gz
+
+# Dump all databases into a single file
+mysqldump -u root -p"$MYSQL_PASSWORD" --all-databases > backup.sql
+
+# Check if mysqldump was successful
+if [ $? -eq 0 ]; then
+    echo "MySQL dump was successful."
+else
+    echo "mysqldump encountered a problem."
+    exit 1
+fi
+
+# Compress the dump file into a tar.gz archive
+tar czf "$FILENAME" backup.sql
+
+# Check if tar command was successful
+if [ $? -eq 0 ]; then
+    echo "File compressed successfully."
+else
+    echo "Compression encountered a problem."
+    exit 1
+fi
+
+# Remove the temporary sql dump file
+rm -f backup.sql
+
+# Confirmation and result
+echo "Backup created: $FILENAME"
+ls -l "$FILENAME"
