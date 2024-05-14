@@ -1,0 +1,12 @@
+[mysqld]
+server-id = 2
+relay_log = /var/log/mysql/mysql-relay-bin.log
+log_bin = /var/log/mysql/mysql-bin.log
+read_only = 1
+replicate_do_db = tyrell_corp
+
+[mariadb]
+replicate_wild_ignore_table = mysql.%
+
+[mysqld]
+replicate_ignore_db = mysql
