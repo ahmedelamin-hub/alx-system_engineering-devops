@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """
 Python script that fetches the TODO list progress for a given employee ID
-using the JSONPlaceholder REST API.
+using the JSONPlaceholder REST API and exports it to a CSV file.
 """
 
+import csv
 import requests
 import sys
-
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -25,14 +25,14 @@ if __name__ == "__main__":
     todos_response = requests.get(todos_url)
     todos_data = todos_response.json()
 
-    # Get the employee name
-    employee_name = user_data.get("name")
+    # Get the employee username
+    username = user_data.get("username")
 
-    # Filter completed tasks
-    completed_tasks = [todo for todo in todos_data if todo.get("completed")]
-    total_tasks = len(todos_data)
-    number_of_done_tasks = len(completed_tasks)
+    # Define the CSV file name
+    csv_file = "{}.csv".format(employee_id)
 
-    print("Employee {} is done with tasks({}/{}):".format(employee_name, number_of_done_tasks, total_tasks))
-    for task in completed_tasks:
-        print("\t {}".format(task.get("title")))
+    # Write to the CSV file
+    with open(csv_file, mode='w', newline='') as file:
+        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
+        for todo in todos_data:
+            writer.writerow([employee_id, username, todo.get("completed"), todo.get("title")])
