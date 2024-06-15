@@ -1,0 +1,31 @@
+# /etc/nginx/sites-enabled/default
+# Nginx configuration for proxying dynamic route requests to the appropriate Gunicorn instances
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    add_header X-Served-By $hostname;
+
+    location / {
+        proxy_pass http://0.0.0.0:5000;
+    }
+
+    location /airbnb-onepage {
+        proxy_pass http://0.0.0.0:5000/airbnb-onepage;
+    }
+
+    location ~ ^/airbnb-dynamic/number_odd_or_even/(\d+)$ {
+        proxy_pass http://0.0.0.0:5001/number_odd_or_even/$1;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+}
