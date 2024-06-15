@@ -1,9 +1,4 @@
-```puppet
-# This Puppet manifest configures Nginx
-exec { 'fix-nginx':
-  command => '/usr/sbin/nginx -s reload',
-  refreshonly => true,
-}
+# This Puppet manifest configures Nginx to handle high load by optimizing worker processes and connections.
 
 file { '/etc/nginx/nginx.conf':
   ensure  => file,
@@ -11,7 +6,7 @@ file { '/etc/nginx/nginx.conf':
   owner   => 'root',
   group   => 'root',
   content => template('nginx/nginx.conf.erb'),
-  notify  => Exec['fix-nginx'],
+  notify  => Exec['reload-nginx'],
 }
 
 file { '/etc/nginx/sites-available/default':
@@ -20,11 +15,10 @@ file { '/etc/nginx/sites-available/default':
   owner   => 'root',
   group   => 'root',
   content => template('nginx/default.erb'),
-  notify  => Exec['fix-nginx'],
+  notify  => Exec['reload-nginx'],
 }
 
-file { '/etc/nginx/sites-enabled/default':
-  ensure => link,
-  target => '/etc/nginx/sites-available/default',
-  notify => Exec['fix-nginx'],
+exec { 'reload-nginx':
+  command     => '/usr/sbin/nginx -s reload',
+  refreshonly => true,
 }
