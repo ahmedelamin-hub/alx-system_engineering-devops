@@ -1,0 +1,28 @@
+# /etc/nginx/sites-enabled/default
+# This Nginx configuration serves the AirBnB clone application
+
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    add_header X-Served-By $hostname;
+
+    location / {
+        proxy_pass http://0.0.0.0:5000;
+    }
+
+    location /airbnb-onepage {
+        proxy_pass http://0.0.0.0:5000/airbnb-onepage;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+}
+
