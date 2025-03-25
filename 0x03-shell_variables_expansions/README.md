@@ -1,1 +1,1 @@
-This is a read me for variables and expansions
+variables and expansions assignment on c
